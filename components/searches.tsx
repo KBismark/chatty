@@ -20,7 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SearchTabData, updateSearchTabStore, useSearchTabStore } from '@/stores/tabs/search';
 import { getLatestStoryUIStore, updateLatestStoryUIStore, useLatestStoryUIStore } from '@/stores/ui';
 import { useMainAccountStore } from '@/stores';
-const SearchBarr: any = SearchBar;
+import { FlatList } from 'react-native-gesture-handler';
 
 let screenScrollInfo: UI;
 function SearchComponent() {
@@ -37,7 +37,7 @@ function SearchComponent() {
 
     return (
     <View>
-        <SwipeableFlatList
+        <FlatList
             stickyHeaderIndices={[0]}
             initialNumToRender={15}
             ListHeaderComponent={()=>{
@@ -54,7 +54,7 @@ function SearchComponent() {
             ListEmptyComponent={()=>{
                 const {colors} = useTheme()
                 return (
-                    <View style={{flex: 1,  justifyContent: 'center', alignItems: 'center', marginTop: '10%' }}>
+                    <View style={{justifyContent: 'center', alignItems: 'center', marginTop: '10%' }}>
                         <ActivityIndicator size={'large'} color={colors.primary} />
                     </View>
                 )
@@ -63,10 +63,9 @@ function SearchComponent() {
                 backgroundColor: colors.white,
                 height: '100%'
             }}
-            data={data}
-            keyExtractor={(item) => typeof item === 'object' ? item.title: item}
+            data={data as any}
+            keyExtractor={(item) => typeof item === 'object' ? (item as any).title: item}
             renderItem={RenderItem}
-            swipeableProps={{}}
            onScroll={(e)=> {
                 let y = e.nativeEvent.contentOffset.y;
                 if(y>=-70){
@@ -122,8 +121,8 @@ const SectionHead = memo(({title}:{title: string})=>{
     const {colors, mode} = useTheme();
     const background = mode === 'dark'? '#000000': colors.white;
     return (
-        <View style={{backgroundColor: background, paddingBottom: 5, paddingTop: 10, paddingHorizontal: 15}}>
-            <Text style={{fontSize: 16, color: colors.fadedBlack, borderBottomWidth: 1, borderBottomColor: colors.divider}}>
+        <View style={{backgroundColor: background, paddingBottom: 5, paddingTop: 10, paddingHorizontal: 15,}}>
+            <Text style={{fontSize: 16, color: colors.fadedBlack,}}>
                 {title}
             </Text>
         </View>
@@ -131,7 +130,7 @@ const SectionHead = memo(({title}:{title: string})=>{
 })
 
 const Header = memo(()=>{
-    const {white, black, searchBar, fadedBlack} = useTheme().colors;
+    const {white, black, searchBar, fadedBlack, primary} = useTheme().colors;
     let {chatHeaderScroll, searchSearchOn} = useLatestStoryUIStore({watch: ['chatHeaderScroll', 'searchSearchOn']});
     const {seacrhText} = useSearchTabStore({watch: ['seacrhText']})
     
@@ -152,7 +151,7 @@ const Header = memo(()=>{
                 </Animatable.View>
             </View>
             <Animatable.View style={[styles.displayRow, { width: '100%', backgroundColor: white, marginHorizontal: 0 }]}>
-                <SearchBarr 
+                <SearchBar 
                     placeholderTextColor={fadedBlack}
                     searchIcon={<Ionicons name='search-outline' size={20}
                         color={fadedBlack}
@@ -167,7 +166,8 @@ const Header = memo(()=>{
                     containerStyle={{
                         height: 40,
                         marginHorizontal: 8,
-                        marginBottom: 5
+                        marginBottom: 5,
+                        backgroundColor: white,
                     }}
                     inputContainerStyle={{
                         backgroundColor: searchBar,
@@ -214,7 +214,7 @@ const Header = memo(()=>{
                             updateSearchTabStore({actors, store: update})
                         })
 
-                    }}  loadingProps={{}} value={seacrhText} showLoading={false} lightTheme={false} round={false} cancelButtonTitle={'Cancel'} cancelButtonProps={{}} showCancel={false}                />
+                    }} value={seacrhText} showLoading={false}  cancelButtonTitle={'Cancel'} cancelButtonProps={{color: primary}} showCancel={false} />
             </Animatable.View>
        </View>
     )

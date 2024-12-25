@@ -11,8 +11,7 @@ export default function Story() {
 
   return (
   <GestureHandlerRootView style={styles.container}>
-       
-        <SafeAreaView style={[styles.container, {backgroundColor: white}]}>
+        <SafeAreaView style={{backgroundColor: white}}>
           <Search />
         </SafeAreaView>
   </GestureHandlerRootView>
