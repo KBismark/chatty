@@ -11,8 +11,8 @@ export const ForYouScreen = memo(()=>{
             showsVerticalScrollIndicator={false}
             horizontal={false}
             data={contactList.slice(0, 14)}
-            renderItem={({item, index})=>{
-                return <Item propsSource={item} />
+            renderItem={({item:userId, index})=>{
+                return <Item propsSource={userId} />
             }}
             keyExtractor={(item,index)=>item}
             ListFooterComponent={<View style={{paddingBottom: '45%'}} />}
