@@ -30,13 +30,14 @@ export const Row = memo(({propsSource:userId, ring}: {propsSource:string, ring?:
     const {white, divider, black, highlights} = colors;
     const hideMessageIndicators = (['search'] as Tabs[]).includes(activeTab)||!isUser||!last.messagePreview;
     
-    let nameUsed = name;
+    let alienUserName = name;
     let firstName = name;
-    [name, nameUsed, firstName] = useMemo(()=>{
+    [name, alienUserName, firstName] = useMemo(()=>{
         name = (name||contact||'Unknown').trim();
-        nameUsed = name.slice(0,20);
-        nameUsed = nameUsed.length>20?`${nameUsed}...`:nameUsed;
-        return [name, nameUsed, name.split(' ').shift()]
+        firstName = name.split(' ').shift() as string;
+        firstName = firstName.length>=20?`${firstName.slice(0,17)}...`:firstName;
+        alienUserName = name.length>=32?`${name.slice(0, 29)}...`:name;
+        return [name, alienUserName, firstName]
     },[name])
 
     
@@ -86,7 +87,7 @@ export const Row = memo(({propsSource:userId, ring}: {propsSource:string, ring?:
                 }
                 <View style={styles.messageNoHead}>
                     <View style={styles.displayRow}>
-                        <Text style={innerStyles.nameText as any}>{nameUsed}</Text>
+                        <Text style={innerStyles.nameText as any}>{!isUser?alienUserName: firstName}</Text>
                         {!hideMessageIndicators&&<Text style={styles.messageDate}>{last.date||'01/24'}</Text>}
                     </View>
                     <View style={styles.displayRow}>

@@ -22,13 +22,14 @@ export const Row = memo(({propsSource: userId}: {propsSource:string})=>{
 
     let {name, contact} = useUserStore({userId, watch: []});
     const [pressing, setPressing] = useState(false);
-    let nameUsed = name;
+    
+    let firstName = name;
 
-    [name, nameUsed] = useMemo(()=>{
-        name = name||contact||'Unknown';
-        nameUsed = name.trim().slice(0,20).trim();
-        nameUsed = nameUsed.length>20?`${nameUsed}...`:nameUsed;
-        return [name, nameUsed]
+    [name, firstName] = useMemo(()=>{
+        name = (name||contact||'Unknown').trim();
+        firstName = name.split(' ').shift() as string;
+        firstName = firstName.length>=20?`${firstName.slice(0,17)}...`:firstName;
+        return [name, firstName]
     },[name])
 
     const innerStyles = useMemo(()=>{
@@ -60,14 +61,14 @@ export const Row = memo(({propsSource: userId}: {propsSource:string})=>{
                 <StatusHead propsSource={userId} size={60} />
                 <View style={styles.messageNoHead}>
                     <View style={styles.displayRow}>
-                        <Text style={innerStyles.nameText as any}>{nameUsed}</Text>
+                        <Text style={innerStyles.nameText as any}>{firstName}</Text>
                     </View>
                     <View style={styles.displayRow}>
                         <Text style={styles.messageSlice}>
                             {'2 hours ago'}
                         </Text>
                         <View>
-                            <MessageIndicator propsSource="" />
+                            <MessageIndicator propsSource={userId} />
                         </View>
                     </View>
                 </View>
