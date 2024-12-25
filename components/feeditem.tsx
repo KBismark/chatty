@@ -12,13 +12,13 @@ import { useUserStore } from "@/stores/users";
 export const Item = memo(({propsSource:userId}: {propsSource: string})=>{
     const {colors} = useTheme();
     let {name, contact} = useUserStore({userId, watch: []})
-    let nameUsed = name;
+    let firstName = name;
 
-    [name, nameUsed] = useMemo(()=>{
-        name = name||contact||'Unknown';
-        nameUsed = name.trim().slice(0,20).trim();
-        nameUsed = nameUsed.length>=20?`${nameUsed}...`:nameUsed;
-        return [name, nameUsed]
+    [name, firstName] = useMemo(()=>{
+        name = (name||contact||'Unknown').trim();
+        firstName = name.split(' ').shift() as string;
+        firstName = firstName.length>=20?`${firstName.slice(0,17)}...`:firstName;
+        return [name, firstName]
     },[name])
     
     const {black, fadedBlack, divider, highlights} = colors;
@@ -29,7 +29,7 @@ export const Item = memo(({propsSource:userId}: {propsSource: string})=>{
                 <View style={[styles.displayRow, {justifyContent: 'flex-start'}]}>
                     <StatusHead propsSource={userId} size={40} />
                     <View style={[styles.displayRow, {marginLeft: 10}]}>
-                        <Text style={ {fontWeight: '700', fontSize: 16, color: black} }>{nameUsed}</Text>
+                        <Text style={ {fontWeight: '700', fontSize: 16, color: black} }>{firstName}</Text>
                         <Text style={{marginLeft: 5, fontSize: 13, fontWeight: '500'}}>2 hours</Text>
                     </View>
                 </View>
@@ -40,7 +40,7 @@ export const Item = memo(({propsSource:userId}: {propsSource: string})=>{
             <GradientBackground colors={generateGradientColors()} style={{...styles.displayRow, height: 250, margin: 5, borderRadius: 20, marginBottom: 5, justifyContent: 'center'}}>
                 {
                     /* Post space */ 
-                    <Text style={{color: '#ffffff', fontWeight: 700, paddingHorizontal: 25, textAlign:'center', fontSize: 20}}>Some cheerful message from {nameUsed.split(' ').shift()}!</Text>
+                    <Text style={{color: '#ffffff', fontWeight: 700, paddingHorizontal: 25, textAlign:'center', fontSize: 20}}>Some cheerful message from {firstName}!</Text>
                 }
             </GradientBackground>
             <View style={[styles.displayRow, { marginVertical: 10, marginLeft: 10}]}>
