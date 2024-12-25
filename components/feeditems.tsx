@@ -21,9 +21,6 @@ export function Feeds(){
                 sharableTopComponent = {<Header />}
                 pagingEnabled={true}
                 scrollEnabled={false}
-                ListFooterComponent={
-                    <View style={{marginVertical: '15%'}} />
-                }
             />
         </View>
     )    
