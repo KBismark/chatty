@@ -37,8 +37,11 @@ export const Item = memo(({propsSource:userId}: {propsSource: string})=>{
                     <Feather name='chevron-down' size={24} color={fadedBlack} />
                 </TouchableOpacity>
             </View>
-            <GradientBackground colors={generateGradientColors()} style={{height: 250, margin: 5, borderRadius: 20, marginBottom: 5}}>
-                {/* Post space */}
+            <GradientBackground colors={generateGradientColors()} style={{...styles.displayRow, height: 250, margin: 5, borderRadius: 20, marginBottom: 5, justifyContent: 'center'}}>
+                {
+                    /* Post space */ 
+                    <Text style={{color: '#ffffff', fontWeight: 700, paddingHorizontal: 25, textAlign:'center', fontSize: 20}}>Some cheerful message from {nameUsed.split(' ').shift()}!</Text>
+                }
             </GradientBackground>
             <View style={[styles.displayRow, { marginVertical: 10, marginLeft: 10}]}>
                 
