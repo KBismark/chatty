@@ -124,8 +124,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     indicatorText: {color: '#ffffff', fontSize: 12, fontWeight: 500, margin: 0,  },
-    messageSlice: {fontSize: 13,marginRight: 5, maxWidth: messageSliceSpace},
-    messageDate: {fontSize: 13},    
+    messageSlice: {fontSize: 12.5,marginRight: 5, maxWidth: messageSliceSpace},
+    messageDate: {fontSize: 12},    
     messageNoHead: {width: widthWithNoHead, paddingRight: 10},
     messageChevron: {marginLeft: 15},
 
