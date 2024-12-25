@@ -31,22 +31,25 @@ export const Row = memo(({propsSource:userId, ring}: {propsSource:string, ring?:
     const hideMessageIndicators = (['search'] as Tabs[]).includes(activeTab)||!isUser||!last.messagePreview;
     
     let nameUsed = name;
-    [name, nameUsed] = useMemo(()=>{
-        name = name||contact||'Unknown';
-        nameUsed = name.trim().slice(0,20);
+    let firstName = name;
+    [name, nameUsed, firstName] = useMemo(()=>{
+        name = (name||contact||'Unknown').trim();
+        nameUsed = name.slice(0,20);
         nameUsed = nameUsed.length>20?`${nameUsed}...`:nameUsed;
-        return [name, nameUsed]
+        return [name, nameUsed, name.split(' ').shift()]
     },[name])
 
+    
+    
     let previewedMessage = useMemo(()=>{
         let previewedMessage = !isUser?
-        `Invite ${name} to start conversation.`:
-        last.messagePreview? last.messagePreview:
-        `Send a message to ${name} to start a conversation.`;
+        `Invite ${firstName} to start conversation.`:
+        last.messagePreview? last.messagePreview.trim():
+        `Send a message to ${firstName} to start a conversation.`;
         
-        previewedMessage = previewedMessage.trim();
+        previewedMessage = last.messagePreview&&previewedMessage.length>=50?`${previewedMessage.slice(0,47).trim()}...`: previewedMessage
         
-        return previewedMessage.length>=50?`${previewedMessage.slice(0,50).trim()}...`: previewedMessage;
+        return previewedMessage;
     },[isUser, last.messagePreview?.slice(0,50)])
 
     const innerStyles = useMemo(()=>{
