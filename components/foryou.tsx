@@ -2,8 +2,9 @@ import { FlatList } from "react-native-gesture-handler"
 import { Item } from "./feeditem"
 import { useMainAccountStore } from "@/stores";
 import { View } from "react-native";
+import { memo } from "react";
 
-export const ForYouScreen = ()=>{
+export const ForYouScreen = memo(()=>{
     const {contactList} = useMainAccountStore({watch: ['contactList']});
     return (
         <FlatList 
@@ -17,5 +18,5 @@ export const ForYouScreen = ()=>{
             ListFooterComponent={<View style={{paddingBottom: '45%'}} />}
         />
     )
-}
+})
 
