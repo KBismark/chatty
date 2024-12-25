@@ -46,7 +46,7 @@ export const Row = memo(({propsSource:userId, ring}: {propsSource:string, ring?:
         
         previewedMessage = previewedMessage.trim();
         
-        return previewedMessage.length>=32?`${previewedMessage.slice(0,32).trim()}...`: previewedMessage;
+        return previewedMessage.length>=50?`${previewedMessage.slice(0,50).trim()}...`: previewedMessage;
     },[isUser, last.messagePreview?.slice(0,50)])
 
     const innerStyles = useMemo(()=>{
