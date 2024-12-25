@@ -1,4 +1,4 @@
-import { Text, useTheme } from "@/constants/Theme";
+import { Text, useTheme } from "@/theme/Theme";
 import { Feather } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { memo, useCallback, useState } from "react";

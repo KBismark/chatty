@@ -1,4 +1,4 @@
-import { Text, useTheme } from "@/constants/Theme";
+import { Text, useTheme } from "@/theme/Theme";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { memo, useMemo} from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";

@@ -1,6 +1,6 @@
 import * as Animatable from 'react-native-animatable';
 import { Pressable, StyleSheet, View } from "react-native";
-import { Text, useTheme } from "@/constants/Theme";
+import { Text, useTheme } from "@/theme/Theme";
 import { SCREEN_WIDTH } from "@/constants/Screen";
 import { ProfileHeadSizeWithMargin, StatusHead } from "./status";
 import { memo, useCallback, useMemo, useState } from "react";

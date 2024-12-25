@@ -5,7 +5,7 @@ import { LatestStories, StatusHead } from './status';
 import { Row } from './chatrow';
 import { useStateStore } from 'statestorejs';
 import { AccountUser, UI } from '@/stores/types';
-import { Text, useTheme } from '@/constants/Theme';
+import { Text, useTheme } from '@/theme/Theme';
 import * as Animatable from 'react-native-animatable'
 import { getLatestStoryUIStore, updateLatestStoryUIStore, useLatestStoryUIStore } from '@/stores/ui';
 import { useMainAccountStore } from '@/stores';

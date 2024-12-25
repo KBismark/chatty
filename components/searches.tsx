@@ -13,7 +13,7 @@ import { StatusHead } from './status';
 import { Row } from './chatrow';
 import { getStore, updateStore, useStateStore } from 'statestorejs';
 import { UI } from '@/stores/types';
-import { Text, useTheme } from '@/constants/Theme';
+import { Text, useTheme } from '@/theme/Theme';
 import * as Animatable from 'react-native-animatable'
 import { SearchBar } from '@rneui/base';
 import { Ionicons } from '@expo/vector-icons';
