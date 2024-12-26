@@ -8,6 +8,10 @@ import { Tabs, useGlobalTabStore } from "@/stores/tabs";
 import { GradientBackground } from "./commons/gradient";
 import { AppStoryRing} from "./commons/rings";
 import { useUserStore } from "@/stores/users";
+import { router } from 'expo-router';
+import { createChatMessageStore } from '@/stores/messages';
+import { useMainAccountStore } from '@/stores';
+import { Message } from '@/stores/types';
 
 
 const widthWithNoHead = SCREEN_WIDTH-ProfileHeadSizeWithMargin
@@ -23,7 +27,7 @@ const getRandomMessageIndicatorNumber = ()=> (Math.floor(Math.random() * 1000) %
 
 export const Row = memo(({propsSource:userId, ring}: {propsSource:string, ring?: boolean})=>{
     const {colors, mode} =  useTheme();
-    let {name, contact, last, isUser} = useUserStore({userId}); // Watching for all changes in user store
+    let {name, contact, last, isUser} = useUserStore({userId, watch: ['last']}); // Watching for all changes in user store
     const {activeTab} = useGlobalTabStore({watch: ['activeTab']})
     const [pressing, setPressing] = useState(false);
 
@@ -64,9 +68,39 @@ export const Row = memo(({propsSource:userId, ring}: {propsSource:string, ring?:
         return [styles.displayRow, styles.row, {backgroundColor: pressing? highlights: white, borderTopColor: divider,}]
     },[mode, pressing])
 
-    const onPressed = ()=>{
-        // setPressing(false)
+    const {id: mainUserId, name: mainUserName} = useMainAccountStore({watch: []})
+    const sampleReceivedMessage: Message = {
+        id: `${mainUserId}-${userId}-0`,
+        time: '06:24',
+        senderId: userId,
+        successCount: 'final',
+        type: 'normal',
+        data: {
+            text: last.messagePreview||`Hello👋 ${mainUserName}. What's up.`
+        }
+    };
+    const sampleSentMessage: Message = {
+        id: `${mainUserId}-${userId}-1`,
+        time: '06:23',
+        senderId: mainUserId,
+        successCount: 'final',
+        type: 'normal',
+        data: {
+            text: `Hi👋 ${alienUserName}. How may I help you?`
+        }
     }
+
+    const onPressed = useCallback(()=>{
+        // Create two chat messages in the conversation database
+        createChatMessageStore({alienUserId: userId, store: sampleSentMessage })
+        createChatMessageStore({alienUserId: userId, store: sampleReceivedMessage })
+
+        router.push({
+            pathname: '/chat/[userId]',
+            params: {userId}
+        })
+    },[])
+
     const onPressedIn = useCallback(()=>{
         setPressing(true)
     },[pressing])

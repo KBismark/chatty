@@ -1,5 +1,5 @@
 import React from "react";
-import { configureForReact, createStore } from "statestorejs";
+import { configureForReact, createStore, getStore } from "statestorejs";
 import { AccountUser } from "./types";
 import { createStoreHook, createStoreUpdater } from "./util";
 import './tabs'
@@ -28,5 +28,7 @@ export const useMainAccountStore = createStoreHook<AccountUser>({ provider: data
 
 // This is used to update store
 export const updateMainAccountStore = createStoreUpdater<AccountUser>({ provider: databaseName, storeId: collectionName })
+
+export const getMainAccountStore = () => getStore<AccountUser>(databaseName, collectionName)!;
 
 export default {}

@@ -145,6 +145,7 @@ const App = memo(()=>{
       <View style={styles.container}>
         <Stack>
           <Stack.Screen name="(tabs)" options={screenOptions} />
+          <Stack.Screen name="chat/[userId]" options={{...screenOptions, animation: 'ios_from_right'}} />
         </Stack>
       </View>
       <StatusBar style={mode==='dark'?'light': 'dark'} />

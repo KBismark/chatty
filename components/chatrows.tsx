@@ -19,6 +19,7 @@ export function Chats() {
         <SwipeableFlatList
             stickyHeaderIndices={[1]}
             initialNumToRender={15}
+            showsVerticalScrollIndicator={false}
             ListHeaderComponent={()=>{
                 return (
                     <LatestStories />
@@ -176,7 +177,6 @@ const styles = StyleSheet.create({
     },
     rowBack: {
         alignItems: 'center',
-        backgroundColor: 'red',
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
