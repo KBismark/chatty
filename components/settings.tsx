@@ -8,6 +8,7 @@ import { router } from "expo-router";
 import { setThemeMode, useTheme } from "@/theme/Theme";
 import { StatusHead } from "./status";
 import { GradientBackground } from "./commons/gradient";
+import { isAndroid } from "@/constants/Screen";
 
 const HELP_PHONE = '+233570891131'
 const HELP_EMAIL = 'bismarkkwabenayamoah@gmail.com'
@@ -45,9 +46,14 @@ const ProfileSettings = ()=>{
                 </View>
                 <View style={{marginBottom: 40}}>
                     <View style={{
-                        shadowColor: black,
-                        shadowOffset: { width: 0, height: 0 },
-                        shadowOpacity: 0.17,
+                        ...(isAndroid?{
+                            shadowColor: black,
+                            shadowOffset: { width: 0, height: 0 },
+                            shadowOpacity: 0.17,
+                        }:{
+                            borderTopColor: divider,
+                            borderTopWidth: 1,
+                        }),
                         backgroundColor: white,
                         borderRadius: 5,
                     }}>
@@ -94,15 +100,20 @@ const ProfileSettings = ()=>{
                 </View>
                 <View style={{marginBottom: 40}}>
                     <View style={{
-                        shadowColor: black,
-                        shadowOffset: { width: 0, height: 0 },
-                        shadowOpacity: 0.17,
+                        ...(isAndroid?{
+                            shadowColor: black,
+                            shadowOffset: { width: 0, height: 0 },
+                            shadowOpacity: 0.17,
+                        }:{
+                            borderTopColor: divider,
+                            borderTopWidth: 1,
+                        }),
                         backgroundColor: white,
                         borderRadius: 5,
                     }}>
                         
                         
-                        <Pressable style={[styles.rowbt, slideStyle, {borderBottomColor: 'rgba(0,0,0,0)'}]}>
+                        <Pressable style={[styles.rowbt, slideStyle]}>
                             <View style={styles.row}>
                                 <MaterialCommunityIcons name='heart-cog' size={21} color={'#ffffff'} style={[styles.icon, {backgroundColor: 'rgb(227, 37, 106)'}]} />
                                 <Text style={{color: black, marginLeft: 10, fontSize: 17,}}>
@@ -111,7 +122,7 @@ const ProfileSettings = ()=>{
                             </View>
                             <Feather name='chevron-right' size={20} color={fadedBlack} />
                         </Pressable>
-                        <Pressable style={[styles.rowbt, slideStyle]}>
+                        <Pressable style={[styles.rowbt, slideStyle, {borderBottomColor: 'rgba(0,0,0,0)'}]}>
                             <View style={styles.row}>
                                 <MaterialIcons name='bookmark-add' size={22} color={'#ffffff'} style={[styles.icon, {backgroundColor: colors.primary, padding: 2}]} />
                                 <Text style={{color: black, marginLeft: 10, fontSize: 17,}}>
@@ -131,9 +142,14 @@ const ProfileSettings = ()=>{
                         </Text>
                     </View>
                     <View style={{
-                        shadowColor: black,
-                        shadowOffset: { width: 0, height: 0 },
-                        shadowOpacity: 0.17,
+                        ...(isAndroid?{
+                            shadowColor: black,
+                            shadowOffset: { width: 0, height: 0 },
+                            shadowOpacity: 0.17,
+                        }:{
+                            borderTopColor: divider,
+                            borderTopWidth: 1,
+                        }),
                         backgroundColor: white,
                         borderRadius: 5,
                     }}>
@@ -157,7 +173,7 @@ const ProfileSettings = ()=>{
                             </View>
                             <Feather name='chevron-right' size={20} color={fadedBlack} />
                         </Pressable>
-                        <Pressable style={[styles.rowbt, slideStyle]}>
+                        <Pressable style={[styles.rowbt, slideStyle, {borderBottomColor: 'rgba(0,0,0,0)'}]}>
                             <View style={styles.row}>
                                 <MaterialIcons name='mail'  size={21} color={'#ffffff'} style={[styles.icon, {backgroundColor: 'rgb(195, 60, 92)'}]} />
                                 <View style={{marginLeft: 10,}}>
@@ -182,9 +198,14 @@ const ProfileSettings = ()=>{
                         </Text>
                     </View>
                     <View style={{
-                        shadowColor: black,
-                        shadowOffset: { width: 0, height: 0 },
-                        shadowOpacity: 0.17,
+                        ...(isAndroid?{
+                            shadowColor: black,
+                            shadowOffset: { width: 0, height: 0 },
+                            shadowOpacity: 0.17,
+                        }:{
+                            borderTopColor: divider,
+                            borderTopWidth: 1,
+                        }),
                         backgroundColor: white,
                         borderRadius: 5,
                     }}>
@@ -252,9 +273,14 @@ const ProfileSettings = ()=>{
                         </Text>
                     </View>
                     <View style={{
-                        shadowColor: black,
-                        shadowOffset: { width: 0, height: 0 },
-                        shadowOpacity: 0.17,
+                        ...(isAndroid?{
+                            shadowColor: black,
+                            shadowOffset: { width: 0, height: 0 },
+                            shadowOpacity: 0.17,
+                        }:{
+                            borderTopColor: divider,
+                            borderTopWidth: 1,
+                        }),
                         backgroundColor: white,
                         borderRadius: 5,
                     }}>
