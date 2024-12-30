@@ -67,7 +67,7 @@ function RootLayoutNav() {
 
           const userIds: string[] = [];
 
-          if (data.length > 0) {
+          if (false&&data.length > 0) {
             data.forEach((contact, index)=>{
 
               if(!contact.phoneNumbers||contact.phoneNumbers.length<1) return;
