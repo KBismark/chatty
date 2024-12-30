@@ -10,10 +10,14 @@ import * as Animatable from 'react-native-animatable'
 import { getLatestStoryUIStore, updateLatestStoryUIStore, useLatestStoryUIStore } from '@/stores/ui';
 import { useMainAccountStore } from '@/stores';
 
+
 let screenScrollInfo: UI;
 export function Chats() {
     const {contactList, id} = useStateStore<AccountUser>('account', 'main', ['contactList'])||{contactList: []};
     const data = contactList.slice().reverse();
+
+    const headerPlaceholder = 'First item renders header';
+
     return (
     <View>
         <SwipeableFlatList
@@ -28,10 +32,23 @@ export function Chats() {
             ListFooterComponent={
                 <View style={{marginVertical: '15%'}} />
             }
-            data={['First item renders header',...data.slice(0, 9), ...data.slice(14, 18)]}
+            data={[headerPlaceholder,...data.slice(0, 9), ...data.slice(14, 18)]}
             keyExtractor={(item) => item}
             renderItem={({item,index})=> <RenderItem index={index} item={item} />}
-            renderRightActions={()=><RenderHiddenItem />}
+            swipeableProps={{
+                enabled: true ,
+                friction: 3,
+                rightThreshold: 200,
+                leftThreshold: 200,
+                overshootLeft: false,
+                overshootRight: false,
+                overshootFriction: 20,
+                useNativeAnimations: true,
+            }}
+            renderRightActions={(item)=>{
+                if(item===headerPlaceholder) return null
+                return <RenderHiddenItem />
+            }}
            onScroll={(e)=> {
                 let y = e.nativeEvent.contentOffset.y;
                 if(y>=-70){
@@ -169,7 +186,6 @@ const styles = StyleSheet.create({
     },
     rowFront: {
         alignItems: 'center',
-        backgroundColor: '#CCC',
         borderBottomColor: 'black',
         borderBottomWidth: 1,
         justifyContent: 'center',
@@ -188,11 +204,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         position: 'absolute',
         top: 0,
-        width: 75,
+        width: 75, 
     },
     backRightBtnRight: {
-        backgroundColor: 'red',
         right: 0,
+        width: 75, 
     },
 
 

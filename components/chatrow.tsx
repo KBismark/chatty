@@ -12,6 +12,7 @@ import { router } from 'expo-router';
 import { createChatMessageStore } from '@/stores/messages';
 import { useMainAccountStore } from '@/stores';
 import { Message } from '@/stores/types';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 
 const widthWithNoHead = SCREEN_WIDTH-ProfileHeadSizeWithMargin
@@ -25,7 +26,7 @@ const rowEntryAnimation = {
 const getRandomMessageIndicatorNumber = ()=> (Math.floor(Math.random() * 1000) %  99) + 1;
 
 
-export const Row = memo(({propsSource:userId, ring}: {propsSource:string, ring?: boolean})=>{
+export const Row = memo(({propsSource:userId, ring, disableSwipe}: {propsSource:string, ring?: boolean, disableSwipe?:boolean})=>{
     const {colors, mode} =  useTheme();
     let {name, contact, last, isUser} = useUserStore({userId, watch: ['last']}); // Watching for all changes in user store
     const {activeTab} = useGlobalTabStore({watch: ['activeTab']})
@@ -109,7 +110,7 @@ export const Row = memo(({propsSource:userId, ring}: {propsSource:string, ring?:
     },[pressing])
     
     return (
-        <Animatable.View animation={rowEntryAnimation} duration={500} style={innerStyles.container}>
+        <View  style={innerStyles.container}>
             <Pressable onPress={onPressed} onPressIn={onPressedIn} onPressOut={onPressedOut}  style={pressableStyle}>
                 {
                     ring?
@@ -138,7 +139,7 @@ export const Row = memo(({propsSource:userId, ring}: {propsSource:string, ring?:
                     </View>
                 </View>
             </Pressable>
-        </Animatable.View>
+        </View>
     )
 })
 
