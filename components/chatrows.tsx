@@ -44,6 +44,7 @@ export function Chats() {
                 overshootRight: false,
                 overshootFriction: 20,
                 useNativeAnimations: true,
+                
             }}
             renderRightActions={(item)=>{
                 if(item===headerPlaceholder) return null

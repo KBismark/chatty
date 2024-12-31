@@ -48,9 +48,9 @@ export const ChatMessage = memo(({mainUserId, alienUserId, messageId}: MessagePr
     return (
         <View style={[styles.container, {justifyContent: isSentMessage?'flex-end':'flex-start', }]}>
             <GradientBackground colors={isSentMessage? sentMessageBackgroundColors: receivedMessageBackgroundColors} style={{...styles.messageContainer, }}>
-                <Text style={{fontWeight: 500, fontSize: 13, color: colors.black, }}>{text}</Text>
-                <View style={[styles.displayRow, {justifyContent: 'flex-end',}]}>
-                    <Text style={{fontWeight: 400, fontSize: 11, color: colors.black, textAlign: 'right', marginRight: 5, }}>{time}</Text>
+                <Text style={{fontWeight: 500, fontSize: 14.5, color: colors.black, }}>{text}</Text>
+                <View style={[styles.displayRow, {justifyContent: 'flex-end', marginTop: 6,}]}>
+                    <Text style={{fontWeight: 400, fontSize: 12, color: colors.black, textAlign: 'right', marginRight: 5, }}>{time}</Text>
                     <MaterialCommunityIcons name={statusIcon as any} size={16} color={statusIconColor} />
                 </View>
             </GradientBackground>
@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
     },
     messageContainer: {
         maxWidth: '86%',
-        paddingVertical: 10,
+        paddingTop: 15,
+        paddingBottom: 10,
         paddingHorizontal: 12,
         borderRadius: 11,
     },

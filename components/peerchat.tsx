@@ -1,5 +1,5 @@
-import { memo, useCallback, useMemo } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { Pressable, StyleSheet, View, Platform, KeyboardAvoidingView, KeyboardEvent, ViewStyle, TextStyle, ImageStyle } from "react-native";
 import SwipeableFlatList from "rn-gesture-swipeable-flatlist";
 import { GradientBackground } from "./commons/gradient";
 import { Text, useTheme } from "@/theme/Theme";
@@ -11,8 +11,10 @@ import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { Message } from "@/stores/types";
 import { useMainAccountStore } from "@/stores";
 import { ChatMessage } from "./message";
-import { SCREEN_WIDTH } from "@/constants/Screen";
+import { isAndroid, SCREEN_WIDTH } from "@/constants/Screen";
 import { useAllChatMessageIds, useAllChatMessages } from "@/stores/messages";
+import { Keyboard } from "react-native";
+import * as Animatable from 'react-native-animatable'
 
 
 
@@ -25,8 +27,14 @@ export const PeerConversation = memo(({userId}: {userId: string})=>{
     
     const background = mode==='dark'?'rgb(0,0,0)':colors.background;
 
+    
+
     return (
-            <View style={{flex: 1, backgroundColor: background,}}>
+            <KeyboardAvoidingView 
+                behavior={!isAndroid ? 'padding' : undefined}
+                keyboardVerticalOffset={!isAndroid ? 100 : 0}
+                style={{ flex: 1,  backgroundColor: background,}}
+            >
                 <Header userId={userId} />
                 <SwipeableFlatList
                     initialNumToRender={15}
@@ -36,14 +44,27 @@ export const PeerConversation = memo(({userId}: {userId: string})=>{
                     data={allMessageIds}
                     keyExtractor={(item, index) => `${item}`}
                     renderItem={({item,index})=> <ChatMessage messageId={item} alienUserId={userId} mainUserId={mainUserId} />}
+                    swipeableProps={{
+                        enabled: true ,
+                        friction: 2,
+                        rightThreshold: SCREEN_WIDTH,
+                        leftThreshold: 200,
+                        overshootLeft: false,
+                        overshootRight: false,
+                        overshootFriction: 10,
+                        useNativeAnimations: true,
+                        dragOffsetFromRightEdge: 100,
+                        onSwipeableWillClose(){},
+                        onSwipeableOpen: (direction) => {
+                            console.log('Swipe opened:', direction);
+                        },
+                        onSwipeableWillOpen: (direction) => {
+                            console.log('Swipe will open:', direction);
+                        },
+                        
+                    }}
                     renderRightActions={()=>{
-                        return (
-                            <View style={[styles.displayRow, {flex: 1, width: '100%', justifyContent: 'space-between', }]}>
-                                <View style={[styles.displayRow, { width: '100%', right: 0, justifyContent: 'flex-end', paddingRight: '15%' }]}>
-                                    <MaterialCommunityIcons name='reply' size={22} color={colors.fadedBlack} style={{marginBottom: -7,}} />
-                                </View>
-                            </View>
-                        )
+                        return <Reply />
                     }}
                 
                     ListEmptyComponent={
@@ -54,16 +75,26 @@ export const PeerConversation = memo(({userId}: {userId: string})=>{
 
                     contentContainerStyle={{paddingTop: 60}}
                 />
+                
                 <Footer userId={userId} />
-            </View>
+            </KeyboardAvoidingView>
     );
 })
 
-
+const Reply = ()=>{
+    const {colors} = useTheme()
+    return (
+        <View style={[styles.displayRow, {flex: 1, width: '100%', justifyContent: 'flex-end',marginRight: 0 }]}>
+            <View style={[styles.displayRow, { width: 75, right: 0, justifyContent: 'flex-end', }]}>
+                <MaterialCommunityIcons name='reply' size={18} color={colors.fadedBlack} style={{marginBottom: -7,}} />
+            </View>
+        </View>
+    )
+}
 
 const Header = memo(({userId}: {userId: string})=>{
     const {colors} = useTheme();
-    let {name, contact} = useUserStore({userId, watch: ['last', 'name']}); // Watching for all changes in user store
+    let {name, contact} = useUserStore({userId, watch: ['name', 'last']}); 
 
     
         let alienUserName = name;
@@ -90,7 +121,7 @@ const Header = memo(({userId}: {userId: string})=>{
                     <StatusHead propsSource={userId} size={35} stripMargin={true}  />
                     <View style={{marginLeft: 10,}}>
                         <Text style={{fontWeight: 700, fontSize: 13, color: colors.black}}>{firstName}</Text>
-                        <Text style={{fontWeight: 700, fontSize: 12, color: colors.fadedBlack}}>Last seen ● Recently</Text>
+                        <Text style={{fontWeight: 700, fontSize: 12, color: colors.fadedBlack}}>Last seen <Text style={{fontSize: 8}}> ● </Text> Recently</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -128,30 +159,69 @@ const replySentMessageBackgroundColors = [
 ]
 
 const Footer = memo(({userId}: {userId: string})=>{
-    const {colors} = useTheme()
+    const {colors, mode} = useTheme();
+    const [message, setMessage] = useState('')
+    const [replyOn, setReplyStatus] = useState(true)
+    const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+    useEffect(() => {
+        if (!isAndroid) {
+            const showSubscription = Keyboard.addListener('keyboardWillShow', (e: KeyboardEvent) => {
+                setKeyboardHeight(e.endCoordinates.height);
+            });
+            const hideSubscription = Keyboard.addListener('keyboardWillHide', () => {
+                setKeyboardHeight(0);
+            });
+
+            return () => {
+                showSubscription.remove();
+                hideSubscription.remove();
+            };
+        }
+    }, []);
+
+    const onChangeText = useCallback((text: string)=>{
+        setMessage(text)
+    },[message])
+
+    const onCloseReply = useCallback(()=>{
+        setReplyStatus(false)
+    },[replyOn])
+
+    const replyMessage = "What's up  What's up What's adpp at's up  What's up What's a at's up  What's up What's a"
+
+    const keyboardEntryAnimation: Animatable.CustomAnimation<ViewStyle&TextStyle&ImageStyle> = {
+        from: {marginBottom: 0},
+        to: {marginBottom: keyboardHeight}
+    }
     return (
-        <View style={[styles.footerContainer, {backgroundColor: colors.white,}]}>
-            <GradientBackground colors={replyReceivedMessageBackgroundColors} style={{...styles.displayRow, justifyContent: 'space-between', paddingRight: 15,paddingBottom: 5, backgroundColor: colors.highlights, borderRadius: 6, marginBottom: 5,}}>
-                <View style={[styles.displayRow]}>
-                    <GradientBackground colors={receivedMessageBackgroundColors} style={{...styles.displayRow, justifyContent: 'center', padding: 10, borderTopRightRadius: 5, borderBottomRightRadius: 5, borderLeftColor: colors.secondary, borderLeftWidth: 4, }}>
-                        <MaterialCommunityIcons name='reply-all-outline' size={18} color={'#ffffff'} />
-                    </GradientBackground>
-                    <Text style={{fontWeight: 500, fontSize: 12, color: colors.black, paddingLeft: 10, paddingRight: 6, maxWidth: SCREEN_WIDTH - 100, }}>{"Yeah. What's up What's up What's What's up What's up What's  What's up What's up What's up What's  What What's up What's up What's  What What's up What's up What's  What What's up What's up What's  What"}</Text>
-                </View>
-                <TouchableOpacity>
-                    <MaterialCommunityIcons name='close' size={18} color={colors.black} />
-                </TouchableOpacity>
-            </GradientBackground>
+        <Animatable.View duration={300} animation={keyboardEntryAnimation} style={[styles.footerContainer, {backgroundColor: colors.white,marginBottom: isAndroid?undefined:keyboardHeight}]}>
+            {
+                replyOn&&
+                <GradientBackground colors={replyReceivedMessageBackgroundColors} style={{...styles.displayRow, justifyContent: 'space-between', paddingRight: 15,paddingBottom: 5, backgroundColor: colors.highlights, borderRadius: 6, marginBottom: 5,}}>
+                    <View style={[styles.displayRow]}>
+                        <GradientBackground colors={receivedMessageBackgroundColors} style={{...styles.displayRow, justifyContent: 'center', padding: 10, borderTopRightRadius: 5, borderBottomRightRadius: 5, borderLeftColor: colors.secondary, borderLeftWidth: 4, }}>
+                            <MaterialCommunityIcons name='reply-all-outline' size={18} color={'#ffffff'} />
+                        </GradientBackground>
+                        <Text style={{fontWeight: 500, fontSize: 13, color: colors.black, paddingLeft: 10, paddingRight: 6, maxWidth: SCREEN_WIDTH - 100, }}>
+                            {replyMessage.length>=64?`${replyMessage.slice(0, 64).trim()}...`:replyMessage}
+                        </Text>
+                    </View>
+                    <TouchableOpacity onPress={onCloseReply}>
+                        <MaterialCommunityIcons name='close' size={18} color={colors.black} />
+                    </TouchableOpacity>
+                </GradientBackground>
+            }
             <View style={[styles.displayRow, { justifyContent: 'space-between', alignItems: 'flex-end', paddingHorizontal: 15,}]}>
                 <TouchableOpacity>
-                    <MaterialCommunityIcons name='plus' size={24} color={colors.primary} />
+                    <MaterialCommunityIcons name='plus' size={28} color={colors.primary} />
                 </TouchableOpacity>
-                <TextInput selectionColor={colors.primary} selectionHandleColor={colors.primary} placeholderTextColor={colors.fadedBlack} placeholder="Type message" multiline={true} cursorColor={colors.primary}  style={[styles.textInput, {backgroundColor: colors.searchBar, color: colors.black,}]} />
+                <TextInput onChangeText={onChangeText} value={message} keyboardAppearance={mode as any} selectionColor={colors.primary} selectionHandleColor={colors.primary} placeholderTextColor={colors.fadedBlack} placeholder="Type message" multiline={true} cursorColor={colors.primary}  style={[styles.textInput, {backgroundColor: colors.searchBar, color: colors.black,}]} />
                 <TouchableOpacity>
-                    <MaterialIcons name='keyboard-voice' size={24} color={colors.primary} />
+                    <MaterialIcons name={message.trim().length<=0?'keyboard-voice':'send'} size={28} color={colors.primary} />
                 </TouchableOpacity>
             </View>
-        </View>
+        </Animatable.View>
     )
 })
 
@@ -164,6 +234,6 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     footerContainer: {width: '100%', minHeight: 50, position: 'absolute', bottom: 0, paddingVertical: 10, },
-    textInput: {width: SCREEN_WIDTH-100, borderRadius: 16, paddingHorizontal: 15, paddingVertical: 8,marginBottom: -3, maxHeight: 90,  },
+    textInput: {width: SCREEN_WIDTH-100, borderRadius: 16, paddingHorizontal: 15, paddingVertical: 10,marginBottom: -3, maxHeight: 95, lineHeight:19, fontSize: 14.5, fontWeight: 500  },
     callIconContainer: {marginHorizontal: 10, }
 })
