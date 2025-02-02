@@ -26,14 +26,6 @@ export function Feeds(){
     )    
 }
 
-const RenderFeedForYou = memo(({item, index}:{item:any, index: any})=>{
-    return (
-        <View style={{flex: 1}}>
-            <ForYouScreen />
-        </View>
-    )
-})
-
 
 const optionsAnimation = {
     from: {
@@ -43,6 +35,9 @@ const optionsAnimation = {
         transform: [{scale: 1}, {translateX: 0}]
     }
 }
+
+
+
 const nextPage: {
     'For You': 'Following';
     Following: 'For You';
@@ -52,6 +47,17 @@ const nextPageNum: {
     'For You': 1;
     Following: 2;
 } = {'For You': 1, 'Following':2}
+
+
+
+const RenderFeedForYou = memo(({item, index}:{item:any, index: any})=>{
+    return (
+        <View style={{flex: 1}}>
+            <ForYouScreen />
+        </View>
+    )
+})
+
 
 const Header = memo(()=>{
     const {colors, mode} = useTheme();

@@ -5,7 +5,7 @@ import { View } from "react-native";
 import { memo } from "react";
 
 export const ForYouScreen = memo(()=>{
-    const {contactList} = useMainAccountStore({watch: ['contactList']});
+    const {contactList} = useMainAccountStore({watch: ['contactList']})!;
     return (
         <FlatList 
             showsVerticalScrollIndicator={false}

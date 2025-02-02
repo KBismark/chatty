@@ -24,7 +24,10 @@ const collectionName = 'main'
 createStore<AccountUser>(databaseName, collectionName, FakeUser );
 
 // This is a hook to allow easy access to the store without providing database and the store name
-export const useMainAccountStore = createStoreHook<AccountUser>({ provider: databaseName, storeId: collectionName })
+export const useMainAccountStore = createStoreHook<AccountUser>({
+  provider: databaseName,
+  storeId: collectionName,
+});
 
 // This is used to update store
 export const updateMainAccountStore = createStoreUpdater<AccountUser>({ provider: databaseName, storeId: collectionName })

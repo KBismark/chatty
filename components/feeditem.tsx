@@ -11,7 +11,7 @@ import { useUserStore } from "@/stores/users";
 
 export const Item = memo(({propsSource:userId}: {propsSource: string})=>{
     const {colors} = useTheme();
-    let {name, contact} = useUserStore({userId, watch: []})
+    let {name, contact} = useUserStore({userId, watch: []})||{}
     let firstName = name;
 
     [name, firstName] = useMemo(()=>{

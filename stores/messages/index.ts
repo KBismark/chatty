@@ -24,14 +24,14 @@ export const useChatMessageStore = ({
   messageId: string;
   watch?: (keyof Message)[];
 }) => {
-  const { id } = useMainAccountStore({ watch: [] });
+  const { id } = useMainAccountStore({ watch: [] })!;
   const databaseName = `${id}-${alienUserId}`;
   const store = useStateStore<Message>(databaseName, messageId, watch);
   return store;
 };
 
 export const useAllChatMessages = ({alienUserId}: { alienUserId: string }): Message[] => {
-    const { id } = useMainAccountStore({ watch: [] });
+    const { id } = useMainAccountStore({ watch: [] })!;
     const databaseName = `${id}-${alienUserId}`;
     const data = getStorageProvider(databaseName);
     return Object.values(data).map((e) => (e as any).value);
@@ -42,7 +42,7 @@ export const useAllChatMessageIds = ({
 }: {
   alienUserId: string;
 }) => {
-  const { id } = useMainAccountStore({ watch: [] });
+  const { id } = useMainAccountStore({ watch: [] })!;
   const databaseName = `${id}-${alienUserId}`;
   const data = getStorageProvider(databaseName);
   return Object.keys(data);
